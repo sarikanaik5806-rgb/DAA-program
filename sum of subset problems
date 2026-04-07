@@ -1,0 +1,55 @@
+#include <iostream>
+using namespace std;
+
+int n, target;
+int weights[20];
+int x[20]; // solution vector
+
+// Function to print subset
+void printSubset() {
+    cout << "{ ";
+    for (int i = 0; i < n; i++) {
+        if (x[i] == 1)
+            cout << weights[i] << " ";
+    }
+    cout << "}" << endl;
+}
+
+// Backtracking function
+void sumOfSubsets(int s, int k, int r) {
+    x[k] = 1;
+
+    if (s + weights[k] == target) {
+        printSubset();
+    }
+    else if (s + weights[k] + weights[k + 1] <= target) {
+        sumOfSubsets(s + weights[k], k + 1, r - weights[k]);
+    }
+
+    if ((s + r - weights[k] >= target) && (s + weights[k + 1] <= target)) {
+        x[k] = 0;
+        sumOfSubsets(s, k + 1, r - weights[k]);
+    }
+}
+
+// Driver code
+int main() {
+    n = 4;
+    int total = 0;
+
+    weights[0] = 5;
+    weights[1] = 10;
+    weights[2] = 12;
+    weights[3] = 13;
+
+    target = 22;
+
+    for (int i = 0; i < n; i++)
+        total += weights[i];
+
+    cout << "Subsets with sum " << target << " are:\n";
+
+    sumOfSubsets(0, 0, total);
+
+    return 0;
+}
